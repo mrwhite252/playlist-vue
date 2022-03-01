@@ -12,6 +12,7 @@
 
 <script>
 import useSignup from "@/composables/useSignup";
+import { ref } from "@vue/reactivity";
 
 export default {
   setup() {
@@ -22,14 +23,14 @@ export default {
     const displayName = ref("");
 
     const handleSubmit = async () => {
-      const res = await signup(email.vaule, password.value, displayName.value);
+      const res = await signup(email.value, password.value, displayName.value);
 
       if (!error.value) {
         console.log("user signed up");
       }
     };
 
-    return { email, password, displayName, error, handleSubmit };
+    return { email, password, displayName, error, isPending, handleSubmit };
   },
 };
 </script>
