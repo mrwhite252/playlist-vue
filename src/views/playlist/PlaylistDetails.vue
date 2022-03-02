@@ -1,6 +1,7 @@
 <template>
   <div v-if="error" class="error">{{ error }}</div>
 
+  <!-- the playlist -->
   <div v-if="playlist" class="playlist-details">
     <div class="playlist-info">
       <div class="cover">
@@ -13,8 +14,16 @@
         Delete the playlist
       </button>
     </div>
+    <!-- the song -->
     <div class="song-list">
-      <p>song list here</p>
+      <div v-if="!playlist.songs.length">No song has been added yet.</div>
+      <div v-for="song in playlist.songs" :key="song.id" class="single-song">
+        <div class="details">
+          <h3>{{ song.title }}</h3>
+          <p>{{ song.artist }}</p>
+        </div>
+        <button v-if="ownership">Delete</button>
+      </div>
       <AddSong v-if="ownership" :playlist="playlist" />
     </div>
   </div>
@@ -95,5 +104,14 @@ export default {
 }
 .description {
   text-align: left;
+}
+
+.single-song {
+  padding: 1em 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed var(--secondary);
+  margin-bottom: 1.5em;
 }
 </style>
