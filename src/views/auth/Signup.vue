@@ -28,6 +28,7 @@ export default {
       if (!error.value) {
         console.log("user signed up");
       }
+      return res;
     };
 
     return { email, password, displayName, error, isPending, handleSubmit };
