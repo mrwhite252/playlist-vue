@@ -25,20 +25,40 @@
 import { ref } from "@vue/reactivity";
 
 import useStorage from "@/composables/useStorage";
+import useCollection from "@/composables/useCollection";
+import getUser from "@/composables/getUser";
+import { timestamp } from "@/firebase/config";
 export default {
   setup() {
     const title = ref("");
     const description = ref("");
     const file = ref(null);
     const fileError = ref(null);
-
     // upload image
     const { url, filePath, uploadImage } = useStorage();
+
+    // setup new collection of playlist
+    const { error, addDoc } = useCollection("playlists");
+
+    // get the id of the user
+    const { user } = getUser();
 
     const handleSubmit = async () => {
       if (file.value) {
         await uploadImage(file.value);
-        console.log("image uploaded, url: ", url.value);
+        await addDoc({
+          title: title.value,
+          description: description.value,
+          userId: user.value.uid,
+          displayName: user.value.displayName,
+          coverUrl: url.value,
+          filePath: filePath.value,
+          songs: [],
+          createdAt: timestamp(),
+        });
+        if (!error.value) {
+          console.log("playlist created");
+        }
       }
     };
 
