@@ -24,6 +24,7 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import { useRouter } from "vue-router";
 
 import useStorage from "@/composables/useStorage";
 import useCollection from "@/composables/useCollection";
@@ -45,11 +46,13 @@ export default {
     // get the id of the user
     const { user } = getUser();
 
+    const router = useRouter();
+
     const handleSubmit = async () => {
       if (file.value) {
         isPending.value = true;
         await uploadImage(file.value);
-        await addDoc({
+        const res = await addDoc({
           title: title.value,
           description: description.value,
           userId: user.value.uid,
@@ -61,7 +64,7 @@ export default {
         });
         isPending.value = false;
         if (!error.value) {
-          console.log("playlist created");
+          router.push({ name: "PlaylistDetails", params: { id: res.id } });
         }
       }
     };
