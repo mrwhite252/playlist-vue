@@ -53,7 +53,7 @@ export default {
           title: title.value,
           description: description.value,
           userId: user.value.uid,
-          displayName: user.value.displayName,
+          userName: user.value.displayName,
           coverUrl: url.value,
           filePath: filePath.value,
           songs: [],
