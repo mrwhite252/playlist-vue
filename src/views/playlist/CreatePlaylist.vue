@@ -15,7 +15,8 @@
 
     <!-- upload cover image -->
     <label>Upload playlist cover image</label>
-    <input type="file" />
+    <input type="file" @change="handleChange" />
+    <div class="error">{{ fileError }}</div>
     <button>Create</button>
   </form>
 </template>
@@ -26,12 +27,31 @@ export default {
   setup() {
     const title = ref("");
     const description = ref("");
+    const file = ref(null);
+    const fileError = ref(null);
 
     const handleSubmit = () => {
-      console.log(title.value, description.value);
+      if (file.value) {
+        console.log(title.value, description.value, file.value);
+      }
     };
 
-    return { title, description, handleSubmit };
+    const types = ["image/png", "image/jpeg", "image/jpg", "image/svg"];
+
+    const handleChange = (e) => {
+      const selected = e.target.files[0];
+
+      if (selected && types.includes(selected.type)) {
+        file.value = selected;
+        fileError.value = null;
+      } else {
+        file.value = null;
+        fileError.value =
+          "Please select the correct format (png, jpeg, jpg, svg)";
+      }
+    };
+
+    return { title, description, handleSubmit, handleChange, fileError };
   },
 };
 </script>
